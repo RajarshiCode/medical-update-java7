@@ -38,5 +38,11 @@ public interface AppointmentSystemDAO {
 	 * */
 	void saveAppointmentsToFile();
 	
+	/**
+	 * this method clears the contents of the file before exiting the Main
+	 * 
+	 * */
+	void clearContainsOfTheFile();
+	
 	
 }

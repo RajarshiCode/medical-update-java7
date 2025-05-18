@@ -145,6 +145,7 @@ public class Main
 
                 }else if(roleChoice.equals("3")) {
                 	System.out.println("Exiting......, Thank You!");
+                	system.clearContainsOfTheFile();
                 	sc.close();
                 	System.exit(0);            
                 }

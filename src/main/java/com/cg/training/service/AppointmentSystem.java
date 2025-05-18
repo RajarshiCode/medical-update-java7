@@ -1,7 +1,9 @@
 package com.cg.training.service;
 
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,14 +63,11 @@ public class AppointmentSystem implements AppointmentSystemDAO {
 	 **/
 	@Override
 	public Appointment bookAppointment(Patient patient) {
-		try (BufferedWriter write = new BufferedWriter(new FileWriter("D:\\filesCreating\\Appointments.csv", true))) {
+		try {
 			for (Doctor doctor : doctors) {
 				if (doctor.isAvailable()) {
 					Appointment appointment = new Appointment(patient, doctor);
 					appointments.add(appointment);
-//					write.write(appointment.appointmentDetails());
-//					write.newLine();
-//					write.close();
 					System.out.println("Appointment booked.");
 					return appointment;
 				}
@@ -161,6 +160,17 @@ public class AppointmentSystem implements AppointmentSystemDAO {
 		if (!found) {
 			System.out.println("No appointments found for Patient ID: " + patientId);
 		}
+	}
+	
+	@Override
+	public void clearContainsOfTheFile() {
+		try {
+            FileOutputStream fileOutputStream = new FileOutputStream("D:\\filesCreating\\Appointments.csv");
+            fileOutputStream.close();
+            System.out.println("File contents cleared successfully.");
+        } catch (IOException e) {
+            System.err.println("An error occurred while clearing the file: " + e.getMessage());
+        }
 	}
 
 	@Override
