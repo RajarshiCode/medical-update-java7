@@ -111,8 +111,7 @@ public class Main {
                                 system.registerPatient(pname);
                                 break;
 
-                            case "2":
-                                System.out.println("All Doctors");
+                            case "2":                                
                                 system.showAllDoctors();
                                 break;
 

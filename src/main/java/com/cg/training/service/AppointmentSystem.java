@@ -146,9 +146,14 @@ public class AppointmentSystem implements AppointmentSystemDAO {
      */
     @Override
     public void showAllDoctors() {
-        for (Doctor d : doctors) {
-            d.showProfile();
-        }
+    	if(doctors.size()==0)
+    		System.out.println("No registered doctors");    	
+    	else {
+    		System.out.println(".....All Doctors.....");
+    		for (Doctor d : doctors) {
+                d.showProfile();
+            }
+    	}
     }
 
     /**
