@@ -8,32 +8,44 @@ import com.cg.training.models.Patient;
 import com.cg.training.service.AppointmentSystem;
 
 /**
+ * This is the main user interface class for the Medical Appointment System.
+ * It allows the user to act as either a Doctor or a Patient and perform
+ * different operations such as registration, booking appointments, and managing them.
  * 
- * 
- * 
- * 
- * 
- * */
-public class Main
-{
-	public static void main(String[] args)  {
+ * Author: Rishiraj Ray and Pritha Saha
+ */
+public class Main {
+    
+    /**
+     * The main method is the entry point of the application.
+     * It uses a simple text-based menu to interact with the user.
+     * 
+     * @param args command-line arguments (not used)
+     */
+    public static void main(String[] args) {
         AppointmentSystem system = new AppointmentSystem();
         Scanner sc = new Scanner(System.in);
+
         System.out.println("Welcome to Medical Appointment System");
         System.out.println();
-        //Takes input from the user asking the role
+
         try {
-        	while (true) {
+            // Main loop for selecting user role
+            while (true) {
                 System.out.println("Are you a:");
                 System.out.println("1. Doctor\n2. Patient\n3. Exit");
                 System.out.print("Choose option (1, 2, or 3): ");
                 String roleChoice = sc.nextLine();
 
+                // Doctor menu
                 if (roleChoice.equals("1")) {
-                   
                     while (true) {
                         System.out.println("\nDoctor Menu:");
-                        System.out.println("1. Register a Doctor\n2. Show All Appointments\n3. Complete Appointment\n4. Remove a Doctor\n5. Exit");
+                        System.out.println("1. Register a Doctor");
+                        System.out.println("2. Show All Appointments");
+                        System.out.println("3. Complete Appointment");
+                        System.out.println("4. Remove a Doctor");
+                        System.out.println("5. Exit");
                         System.out.print("Enter choice: ");
                         String doctorChoice = sc.nextLine();
 
@@ -80,33 +92,33 @@ public class Main
                         if (doctorChoice.equals("5")) break;
                     }
 
+                // Patient menu
                 } else if (roleChoice.equals("2")) {
-                   
                     while (true) {
                         System.out.println("\nPatient Menu:");
-                        System.out.println("1. Register a Patient\n2. Show All Doctors\n3. Book Appointment\n4. Show Appointments\n5. Exit");
+                        System.out.println("1. Register a Patient");
+                        System.out.println("2. Show All Doctors");
+                        System.out.println("3. Book Appointment");
+                        System.out.println("4. Show Appointments");
+                        System.out.println("5. Exit");
                         System.out.print("Enter choice: ");
                         String patientChoice = sc.nextLine();
 
                         switch (patientChoice) {
                             case "1":
-                            //Registers a Patient, Calls the functions in the AppointmentSystem Class
                                 System.out.print("Enter Patient Name: ");
                                 String pname = sc.nextLine();
                                 system.registerPatient(pname);
                                 break;
-                                
-                                
-                            case "2":{
-                            	System.out.println("All Doctors");
-                            	system.showAllDoctors();
-                            	break;
-                            }
+
+                            case "2":
+                                System.out.println("All Doctors");
+                                system.showAllDoctors();
+                                break;
+
                             case "3":
-                            //Registers a Doctor, Calls the functions in the AppointmentSystem Class
                                 System.out.print("Enter Numeric Patient ID (digits only, without 'P'): ");
                                 String pid = sc.nextLine();
-                                //Checking weather the Patient ID is valid
                                 if (!pid.matches("\\d+")) {
                                     System.out.println("Invalid ID: Must contain only numbers.");
                                     break;
@@ -125,38 +137,35 @@ public class Main
                                 break;
 
                             case "4":
-                            //Shows appointment of patients, Calls the functions in the AppointmentSystem Class
                                 System.out.print("Enter your Patient ID (e.g., P1001): ");
                                 String patId = sc.nextLine();
                                 system.showAppointmentsByPatientId(patId);
                                 break;
 
                             case "5":
-                            //Return Back to previous menu
                                 System.out.println("Going back to main menu!!");
                                 break;
 
                             default:
-                                System.out.println("Invalid choice. Please enter a number from 1 to 4.");
+                                System.out.println("Invalid choice. Please enter a number from 1 to 5.");
                         }
 
                         if (patientChoice.equals("5")) break;
                     }
 
-                }else if(roleChoice.equals("3")) {
-                	System.out.println("Exiting......, Thank You!");
-                	system.clearContainsOfTheFile();
-                	sc.close();
-                	System.exit(0);            
+                // Exit the application
+                } else if (roleChoice.equals("3")) {
+                    System.out.println("Exiting......, Thank You!");
+                    system.clearAllContentsOfTheFile();
+                    sc.close();
+                    System.exit(0);
+
+                } else {
+                    System.out.println("Invalid role choice. Please enter 1, 2, or 3.");
                 }
-                else 
-                    System.out.println("Invalid role choice. Please enter 1 or 2.");
-                    
-                
             }
-        }catch(Exception e) {
-        	
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred.");
         }
-        
     }
 }

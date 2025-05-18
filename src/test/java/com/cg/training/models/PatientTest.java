@@ -5,51 +5,48 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cg.training.models.Patient;
-
+/**
+ * This class tests the Patient class to ensure that patient data
+ * is correctly initialized and the showProfile method works without errors.
+ * <p>
+ * It is written in a simple format for beginners to understand.
+ * </p>
+ * 
+ * @author Sampritee Dey
+ */
 public class PatientTest {
 
-	private Patient patient1;
+    private Patient patient;
 
-	@Before
-	public void setUp1() {
-		patient1 = new Patient("P1001", "Ram");
-	}
+    /**
+     * This method runs before each test and creates a Patient object
+     * with sample data to be used in testing.
+     */
+    @Before
+    public void setUp() {
+        patient = new Patient("P1001", "Ram");
+    }
 
-	@Test
-	public void testPatientConstructor_shouldInitializeCorrectly() {
-		assertEquals("P1001", patient1.getId());
-		assertEquals("Ram", patient1.getName());
-	}
+    /**
+     * This test checks that the Patient constructor initializes
+     * the ID and name correctly.
+     */
+    @Test
+    public void testPatientConstructor_shouldInitializeCorrectly() {
+        assertEquals("P1001", patient.getId());
+        assertEquals("Ram", patient.getName());
+    }
 
-	@Test
-	public void testShowProfile_shouldNotThrowException() {
-		try {
-			patient1.showProfile();
-		} catch (Exception e) {
-			fail("showProfile should not throw any exception");
-		}
-	}
-
-	private Patient patient;
-
-	@Before
-	public void setUp() {
-		patient1 = new Patient("P1001", "Ram");
-	}
-
-	@Test
-	public void testPatient() {
-		assertEquals("P1001", patient1.getId());
-		assertEquals("Ram", patient1.getName());
-	}
-
-	@Test
-	public void testShowProfile() {
-		try {
-			patient1.showProfile();
-		} catch (Exception e) {
-			fail("showProfile should not throw any exception");
-		}
-	}
+    /**
+     * This test ensures that the showProfile method runs
+     * without throwing any exceptions.
+     */
+    @Test
+    public void testShowProfile_shouldNotThrowException() {
+        try {
+            patient.showProfile();
+        } catch (Exception e) {
+            fail("showProfile should not throw any exception");
+        }
+    }
 }

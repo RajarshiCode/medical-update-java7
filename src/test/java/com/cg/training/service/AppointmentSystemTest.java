@@ -5,7 +5,6 @@ import com.cg.training.models.Appointment;
 import com.cg.training.models.Doctor;
 import com.cg.training.models.Patient;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,156 +12,202 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+/**
+ * This class contains unit tests for the AppointmentSystem class.
+ * It tests functionalities like registering doctors and patients,
+ * booking and completing appointments, and handling exceptions.
+ * <p>
+ * This is written in simple Java for beginners to understand.
+ * </p>
+ * 
+ * @author Rittika Dutta
+ */
 public class AppointmentSystemTest {
-	private AppointmentSystem system;
 
-	@Before
-	public void setUp() {
-		system = new AppointmentSystem();
-	}
+    private AppointmentSystem system;
 
-	@Test
-	public void testRegisterPatient() {
-		system.registerPatient("Ram");
-		Patient patient = system.findPatientById("P1000");
-		assertNotNull(patient);
-		assertEquals("P1000", patient.getId());
-		assertEquals("Ram", patient.getName());
-	}
+    /**
+     * This method is called before each test. It initializes a new AppointmentSystem.
+     */
+    @Before
+    public void setUp() {
+        system = new AppointmentSystem();
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testRegisterInvalidPatient() {
-		system.registerPatient("123Ram");
-	}
+    /**
+     * Tests if a patient is correctly registered and can be found by ID.
+     */
+    @Test
+    public void testRegisterPatient() {
+        system.registerPatient("Ram");
+        Patient patient = system.findPatientById("P1000");
+        assertNotNull(patient);
+        assertEquals("P1000", patient.getId());
+        assertEquals("Ram", patient.getName());
+    }
 
-	@Test
-	public void testRegisterDoctor() {
-		system.registerDoctor("DrSushir");
-		List<Doctor> doctors = system.doctors;
-		assertEquals(1, doctors.size());
-		assertEquals("D1000", doctors.get(0).getId());
-	}
+    /**
+     * Tests that registering a patient with an invalid name throws an exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testRegisterInvalidPatient() {
+        system.registerPatient("123Ram");
+    }
 
-	// Test for invalid doctor registration (non-alphabetic name)
-	@Test(expected = IllegalArgumentException.class)
-	public void testRegisterInvalidDoctor() {
-		system.registerDoctor("Dr123");
-	}
+    /**
+     * Tests if a doctor is correctly registered and added to the list.
+     */
+    @Test
+    public void testRegisterDoctor() {
+        system.registerDoctor("DrSushir");
+        List<Doctor> doctors = system.doctors;
+        assertEquals(1, doctors.size());
+        assertEquals("D1000", doctors.get(0).getId());
+    }
 
-	// Test booking an appointment
-	@Test
-	public void testBookAppointment() {
-		system.registerDoctor("DrSushir");
-		Doctor doctor = system.doctors.get(0);
-		doctor.setAvailable(true);
+    /**
+     * Tests that registering a doctor with an invalid name throws an exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testRegisterInvalidDoctor() {
+        system.registerDoctor("Dr123");
+    }
 
-		Patient patient = new Patient("P2000", "Ram");
-		Appointment appointment = system.bookAppointment(patient);
+    /**
+     * Tests that an appointment is successfully booked with an available doctor.
+     */
+    @Test
+    public void testBookAppointment() {
+        system.registerDoctor("DrSushir");
+        Doctor doctor = system.doctors.get(0);
+        doctor.setAvailable(true);
 
-		assertNotNull(appointment);
-		assertEquals("P2000", appointment.patient.getId());
-		assertEquals("DrSushir", appointment.doctor.getName());
-	}
+        Patient patient = new Patient("P2000", "Ram");
+        Appointment appointment = system.bookAppointment(patient);
 
-	// Test booking appointment with no available doctor
-	@Test(expected = InvalidAppointmentException.class)
-	public void testBookAppointmentwithnoDoctor() {
-		system.registerDoctor("DrSushir");
-		Doctor doctor = system.doctors.get(0);
-		doctor.setAvailable(false);
+        assertNotNull(appointment);
+        assertEquals("P2000", appointment.patient.getId());
+        assertEquals("DrSushir", appointment.doctor.getName());
+    }
 
-		Patient patient = new Patient("P2001", "Sham");
-		system.bookAppointment(patient);
-	}
+    /**
+     * Tests that booking an appointment when no doctor is available throws an exception.
+     */
+    @Test(expected = InvalidAppointmentException.class)
+    public void testBookAppointmentwithnoDoctor() {
+        system.registerDoctor("DrSushir");
+        Doctor doctor = system.doctors.get(0);
+        doctor.setAvailable(false);
 
-	// Test completing an appointment
-	@Test
-	public void testCompleteAppointment() {
-		system.registerDoctor("DrSushir");
-		Doctor doctor = system.doctors.get(0);
-		doctor.setAvailable(true);
+        Patient patient = new Patient("P2001", "Sham");
+        system.bookAppointment(patient);
+    }
 
-		Patient patient = new Patient("P3000", "Laxman");
-		Appointment a = system.bookAppointment(patient);
+    /**
+     * Tests that a booked appointment can be completed successfully.
+     */
+    @Test
+    public void testCompleteAppointment() {
+        system.registerDoctor("DrSushir");
+        Doctor doctor = system.doctors.get(0);
+        doctor.setAvailable(true);
 
-		try {
-			system.completeAppointment(0);
-			assertEquals("Completed", a.getStatus());
-		} catch (InvalidAppointmentException e) {
-			fail("Exception should not be thrown");
-		}
-	}
+        Patient patient = new Patient("P3000", "Laxman");
+        Appointment a = system.bookAppointment(patient);
 
-	@Test(expected = InvalidAppointmentException.class)
-	public void testCompleteAppointmentinvalidIndex() throws InvalidAppointmentException {
-		system.completeAppointment(5);
-	}
+        try {
+            system.completeAppointment(0);
+            assertEquals("Completed", a.getStatus());
+        } catch (InvalidAppointmentException e) {
+            fail("Exception should not be thrown");
+        }
+    }
 
-	@Test(expected = InvalidAppointmentException.class)
-	public void testCompletedAppointment() throws InvalidAppointmentException {
-		system.registerDoctor("DrSushir");
-		Doctor doctor = system.doctors.get(0);
-		doctor.setAvailable(true);
+    /**
+     * Tests that completing an appointment with an invalid index throws an exception.
+     */
+    @Test(expected = InvalidAppointmentException.class)
+    public void testCompleteAppointmentinvalidIndex() throws InvalidAppointmentException {
+        system.completeAppointment(5);
+    }
 
-		Patient patient = new Patient("P4000", "Bharat");
-		Appointment a = system.bookAppointment(patient);
-		system.completeAppointment(0);
-		system.completeAppointment(0); // This should throw exception
-	}
+    /**
+     * Tests that completing an already completed appointment throws an exception.
+     */
+    @Test(expected = InvalidAppointmentException.class)
+    public void testCompletedAppointment() throws InvalidAppointmentException {
+        system.registerDoctor("DrSushir");
+        Doctor doctor = system.doctors.get(0);
+        doctor.setAvailable(true);
 
-	// Test booking an appointment when all doctors are unavailable
-	@Test(expected = InvalidAppointmentException.class)
-	public void testBookAppointmentWithNoAvailableDoctor() {
-		system.registerDoctor("DrSushir");
-		Doctor doctor = system.doctors.get(0);
-		doctor.setAvailable(false); // Doctor unavailable
+        Patient patient = new Patient("P4000", "Bharat");
+        Appointment a = system.bookAppointment(patient);
+        system.completeAppointment(0);
+        system.completeAppointment(0); // This should throw exception
+    }
 
-		Patient patient = new Patient("P2002", "Jaya");
-		system.bookAppointment(patient); // Should throw exception
-	}
+    /**
+     * Tests that booking fails when all doctors are unavailable.
+     */
+    @Test(expected = InvalidAppointmentException.class)
+    public void testBookAppointmentWithNoAvailableDoctor() {
+        system.registerDoctor("DrSushir");
+        Doctor doctor = system.doctors.get(0);
+        doctor.setAvailable(false); // Doctor unavailable
 
-	// Test appointment details
-	@Test
-	public void testAppointmentDetails() {
-		system.registerDoctor("DrSushir");
-		system.registerPatient("Ram");
+        Patient patient = new Patient("P2002", "Jaya");
+        system.bookAppointment(patient); // Should throw exception
+    }
 
-		Doctor doctor = system.doctors.get(0);
-		doctor.setAvailable(true);
+    /**
+     * Tests that the appointment details are shown correctly.
+     */
+    @Test
+    public void testAppointmentDetails() {
+        system.registerDoctor("DrSushir");
+        system.registerPatient("Ram");
 
-		Patient patient = system.patients.get(0);
-		Appointment appointment = system.bookAppointment(patient);
+        Doctor doctor = system.doctors.get(0);
+        doctor.setAvailable(true);
 
-		String expectedDetails = "Appointment: Patient[Ram] - Doctor[DrSushir] - Status: Scheduled";
-		assertEquals(expectedDetails, appointment.appointmentDetails());
-	}
+        Patient patient = system.patients.get(0);
+        Appointment appointment = system.bookAppointment(patient);
 
-	// Test retrieving appointments by doctor ID
-	@Test
-	public void testShowAppointmentsByDoctorId() {
-		system.registerDoctor("DrSushir");
-		system.registerPatient("Ram");
+        String expectedDetails = "Appointment: Patient[Ram] - Doctor[DrSushir] - Status: Scheduled";
+        assertEquals(expectedDetails, appointment.appointmentDetails());
+    }
 
-		Doctor doctor = system.doctors.get(0);
-		doctor.setAvailable(true);
+    /**
+     * Tests that appointments can be retrieved using a doctor's ID.
+     */
+    @Test
+    public void testShowAppointmentsByDoctorId() {
+        system.registerDoctor("DrSushir");
+        system.registerPatient("Ram");
 
-		Patient patient = system.patients.get(0);
-		system.bookAppointment(patient);
+        Doctor doctor = system.doctors.get(0);
+        doctor.setAvailable(true);
 
-		system.showAppointmentsByDoctorId("D1000");
-	}
+        Patient patient = system.patients.get(0);
+        system.bookAppointment(patient);
 
-	@Test
-	public void testShowAppointmentsByPatientId() {
-		system.registerDoctor("DrSushir");
-		system.registerPatient("Ram");
+        system.showAppointmentsByDoctorId("D1000");
+    }
 
-		Doctor doctor = system.doctors.get(0);
-		doctor.setAvailable(true);
+    /**
+     * Tests that appointments can be retrieved using a patient's ID.
+     */
+    @Test
+    public void testShowAppointmentsByPatientId() {
+        system.registerDoctor("DrSushir");
+        system.registerPatient("Ram");
 
-		Patient patient = system.patients.get(0);
-		system.bookAppointment(patient);
+        Doctor doctor = system.doctors.get(0);
+        doctor.setAvailable(true);
 
-		system.showAppointmentsByPatientId("P1000"); // Patient ID should match
-	}
+        Patient patient = system.patients.get(0);
+        system.bookAppointment(patient);
+
+        system.showAppointmentsByPatientId("P1000"); // Patient ID should match
+    }
 }
